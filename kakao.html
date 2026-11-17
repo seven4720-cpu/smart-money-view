@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow,noarchive">
+<title>Smart Money Flow 카카오 연결</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pretendard@1.3.9/dist/web/static/pretendard.min.css">
+<style>
+:root{--bg:#fff;--ink:#111418;--muted:#6b7078;--panel:#f5f6f8;--red:#B3122E}
+@media (prefers-color-scheme:dark){:root{--bg:#121417;--ink:#eef0f2;--muted:#9aa0a6;--panel:#1d2024;--red:#F0566C}}
+body{margin:0;background:var(--bg);color:var(--ink);font:18px/1.6 Pretendard,-apple-system,"Malgun Gothic",sans-serif}
+.w{max-width:520px;margin:0 auto;padding:36px 22px}
+h1{font-size:24px;margin:0 0 6px} p{margin:8px 0;color:var(--muted)}
+.code{margin:22px 0 12px;padding:18px;border-radius:14px;background:var(--panel);font:600 17px/1.5 ui-monospace,Menlo,Consolas,monospace;word-break:break-all;color:var(--ink)}
+button{width:100%;font:inherit;font-size:20px;font-weight:700;padding:16px;border:0;border-radius:14px;background:var(--red);color:#fff;cursor:pointer}
+.ok{display:none;margin-top:14px;text-align:center;font-weight:700;color:var(--red)}
+.step{margin-top:26px;padding:16px;border-radius:14px;background:var(--panel);color:var(--ink);font-size:17px}
+.err{color:var(--red);font-weight:700}
+</style></head><body><div class="w" id="w"></div>
+<script>
+(function(){
+var q=new URLSearchParams(location.search),code=q.get('code'),err=q.get('error_description')||q.get('error'),w=document.getElementById('w');
+if(code){
+ w.innerHTML='<h1>카카오 연결이 거의 끝났습니다</h1><p>아래 <b>연결 코드</b>를 복사해서, 이 링크를 보낸 사람에게 카카오톡으로 보내 주세요.</p>'+
+ '<div class="code" id="c"></div><button id="b">연결 코드 복사하기</button><div class="ok" id="ok">복사됐습니다. 카카오톡 대화창에 붙여 넣어 보내 주세요.</div>'+
+ '<div class="step">① 위 빨간 단추를 누르세요<br>② 카카오톡에서 보낸 사람과의 대화방을 여세요<br>③ 입력창을 길게 눌러 <b>붙여넣기</b> 후 보내기<br><br>코드는 <b>10분 안에</b> 써야 합니다.</div>';
+ document.getElementById('c').textContent=code;
+ document.getElementById('b').onclick=function(){
+  var done=function(){document.getElementById('ok').style.display='block'};
+  if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(code).then(done,function(){sel()})}else{sel()}
+  function sel(){var r=document.createRange();r.selectNodeContents(document.getElementById('c'));var s=getSelection();s.removeAllRanges();s.addRange(r);try{document.execCommand('copy');done()}catch(e){}}
+ };
+}else if(err){
+ w.innerHTML='<h1>연결이 되지 않았습니다</h1><p class="err"></p><p>링크를 보낸 사람에게 이 화면을 캡처해서 보내 주세요.</p>';
+ w.querySelector('.err').textContent=err;
+}else{
+ w.innerHTML='<h1>Smart Money Flow</h1><p>카카오 연결용 안내 화면입니다.</p>';
+}
+})();
+</script></body></html>
